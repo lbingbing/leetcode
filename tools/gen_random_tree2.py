@@ -1,14 +1,15 @@
 import random
 from collections import deque
 
-n = 100
-choices = [[True]*30 + [False]*50,
-           [True]*40 + [False]*20,
-           [True]*50 + [False]*10,]
-speed = 3
+m = 20
+choices = [[True]*40 + [False]*1,
+           [True]*50 + [False]*1,
+           [True]*60 + [False]*1,]
+speed = 2
 
 class TreeNode:
     def __init__(self, nil = False):
+        self.val = None
         self.nil = nil
         self.l = None
         self.r = None
@@ -30,33 +31,35 @@ def grow_tree(node, level):
     if r:
         grow_tree(node.r, level+1)
 
+def number_tree(tree):
+    val = 0
+    def number_tree_helper(tree):
+        nonlocal val
+        if tree and not tree.nil:
+            number_tree_helper(tree.l)
+            val += 1
+            tree.val = val
+            number_tree_helper(tree.r)
+    number_tree_helper(tree)
+    return tree
+
 def serialize_tree(tree):
     q = deque([tree])
     l = []
     while q:
         node = q.popleft()
         if not node.nil:
-            l.append(True)
+            l.append(str(node.val))
         else:
-            l.append(False)
+            l.append('null')
         if node.l:
             q.append(node.l)
         if node.r:
             q.append(node.r)
+    while l and l[-1]=='null':
+        l.pop()
     return l
 
-for i in range(0,n):
-    l1 = serialize_tree(gen_tree())
-    end = len(l1) - list(reversed(l1)).index(True) - 1
-    l1 = l1[0:end+1]
-    l2 = []
-    i = 1
-    for b in l1:
-        if b:
-            l2.append(str(i))
-            i += 1
-        else:
-            l2.append('null')
-    print('[',end='')
-    print(','.join(l2),end='')
-    print(']')
+for i in range(0,m):
+    l = serialize_tree(number_tree(gen_tree()))
+    print('['+','.join(l)+']')
