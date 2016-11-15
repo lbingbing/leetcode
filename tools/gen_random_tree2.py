@@ -1,10 +1,9 @@
 import random
 from collections import deque
 
-m = 20
-choices = [[True]*40 + [False]*1,
-           [True]*50 + [False]*1,
-           [True]*60 + [False]*1,]
+choices = [[True]*7 + [False]*1,
+           [True]*8 + [False]*1,
+           [True]*9 + [False]*1,]
 speed = 2
 
 class TreeNode:
@@ -60,6 +59,8 @@ def serialize_tree(tree):
         l.pop()
     return l
 
-for i in range(0,m):
-    l = serialize_tree(number_tree(gen_tree()))
-    print('['+','.join(l)+']')
+if __name__ == "__main__":
+    m = 20
+    for i in range(0,m):
+        l = serialize_tree(number_tree(gen_tree()))
+        print('['+','.join(l)+']')
